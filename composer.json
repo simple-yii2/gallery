@@ -1,0 +1,23 @@
+{
+    "name": "simple-yii2/gallery",
+    "description": "Images gallery module for Yii PHP Framework Version 2",
+    "type": "yii2-module",
+    "keywords": ["yii2","module","gallery"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Dmitry Khlystov",
+            "email": "dkhlystov@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "simple-yii2/storage": "*",
+        "simple-yii2/uploadimage": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "gallery\\": ""
+        }
+    }
+}

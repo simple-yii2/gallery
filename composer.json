@@ -13,7 +13,7 @@
     "require": {
         "yiisoft/yii2": "*",
         "simple-yii2/storage": "*",
-        "simple-yii2/uploadimage": "*"
+        "dkhlystov/yii2-uploadimage": "*"
     },
     "autoload": {
         "psr-4": {

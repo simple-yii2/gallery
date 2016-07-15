@@ -12,10 +12,9 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "creocoder/yii2-nested-sets": "0.9.*",
         "simple-yii2/storage": "*",
-        "dkhlystov/yii2-uploadimage": "*",
-        "dkhlystov/yii2-treegrid": "*"
+        "simple-yii2/translit": "*",
+        "dkhlystov/yii2-uploadimage": "*"
     },
     "autoload": {
         "psr-4": {

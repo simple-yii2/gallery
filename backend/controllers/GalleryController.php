@@ -5,6 +5,7 @@ namespace gallery\backend\controllers;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
 use gallery\backend\models\GalleryForm;
@@ -103,8 +104,10 @@ class GalleryController extends Controller
 
 		if ($item->delete()) {
 			foreach ($item->images as $image) {
+				$image->delete();
 				Yii::$app->storage->removeObject($image);
 			}
+
 			Yii::$app->storage->removeObject($item);
 			
 			Yii::$app->session->setFlash('success', Yii::t('gallery', 'Gallery deleted successfully.'));

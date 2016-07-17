@@ -39,6 +39,9 @@ class GalleryForm extends Model
 	 */
 	public $description;
 
+	/**
+	 * @var array Gallery images.
+	 */
 	public $images = [];
 
 	/**

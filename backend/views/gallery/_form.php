@@ -56,7 +56,7 @@ GalleryFormAsset::register($this);
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
 			<?= Html::submitButton(Yii::t('gallery', 'Save'), ['class' => 'btn btn-primary']) ?>
-			<?= Html::a(Yii::t('gallery', 'Cancel'), ['index'], ['class' => 'btn btn-link']) ?>
+			<?= Html::a(Yii::t('gallery', 'Cancel'), ['index'], ['class' => 'btn btn-default']) ?>
 		</div>
 	</div>
 

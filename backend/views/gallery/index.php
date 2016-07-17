@@ -7,7 +7,7 @@ use gallery\common\models\GallerySection;
 
 $title = Yii::t('gallery', 'Galleries');
 
-$this->title = $title . '|' . Yii::$app->name;
+$this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
 	$title,

@@ -25,14 +25,14 @@ $(function() {
 		);
 
 		$modal.find('.modal-footer').append(
-			$('<button class="btn btn-default" data-dismiss="modal" />').text($uploadimage.data('textCancel')),
 			$('<button class="btn btn-primary" />').text($uploadimage.data('textSave')).click(function() {
 				item.data({
 					'title': $title.val(),
 					'description': $description.val()
 				});
 				$modal.modal('hide');
-			})
+			}),
+			$('<button class="btn btn-default" data-dismiss="modal" />').text($uploadimage.data('textCancel'))
 		);
 
 		$modal.on('hidden.bs.modal', function() {

@@ -70,7 +70,7 @@ class Module extends \yii\base\Module {
 
 		if (Yii::$app->user->can('Gallery')) {
 			return [
-				['label' => Yii::t('gallery', 'Gallery'), 'url' => ["$base/gallery/gallery/index"]],
+				['label' => Yii::t('gallery', 'Galleries'), 'url' => ["$base/gallery/gallery/index"]],
 			];
 		}
 		

@@ -2,6 +2,7 @@
 
 return [
 	'Galleries' => 'Фотогалереи',
+	
 	'Changes saved successfully.' => 'Изменения успешно сохранены.',
 	'Gallery not found.' => 'Фотогалерея не найдена.',
 	'Gallery deleted successfully.' => 'Фотогалерея успешно удалена.',

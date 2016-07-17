@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'Galleries' => 'Фотогалереи',
+	'Galleries' => 'Фотогалерея',
 	
 	'Changes saved successfully.' => 'Изменения успешно сохранены.',
 	'Gallery not found.' => 'Фотогалерея не найдена.',

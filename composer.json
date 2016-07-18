@@ -13,7 +13,7 @@
     "require": {
         "yiisoft/yii2": "*",
         "simple-yii2/storage": "*",
-        "simple-yii2/translit": "*",
+        "dkhlystov/yii2-translit": "*",
         "dkhlystov/yii2-uploadimage": "*"
     },
     "autoload": {

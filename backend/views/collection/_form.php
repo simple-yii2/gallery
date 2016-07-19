@@ -25,6 +25,8 @@ GalleryFormAsset::register($this);
 
 	<?= $form->field($model, 'title') ?>
 
+	<?php if ($model->object !== null) echo $form->field($model, 'alias'); ?>
+
 	<?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
 
 	<?= $form->field($model, 'images')->widget(UploadImages::className(), [
@@ -56,7 +58,7 @@ GalleryFormAsset::register($this);
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
 			<?= Html::submitButton(Yii::t('gallery', 'Save'), ['class' => 'btn btn-primary']) ?>
-			<?= Html::a(Yii::t('gallery', 'Cancel'), ['index'], ['class' => 'btn btn-default']) ?>
+			<?= Html::a(Yii::t('gallery', 'Cancel'), ['section/index'], ['class' => 'btn btn-default']) ?>
 		</div>
 	</div>
 

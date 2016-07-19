@@ -6,18 +6,24 @@ use Yii;
 use yii\base\Model;
 
 use gallery\common\models\Gallery;
+use gallery\common\models\GalleryCollection;
 use gallery\common\models\GalleryImage;
 
 /**
- * Gallery editting form.
+ * Gallery collection editting form.
  */
-class GalleryForm extends Model
+class GalleryCollectionForm extends Model
 {
 
 	/**
 	 * @var boolean Active.
 	 */
 	public $active;
+
+	/**
+	 * @var string Alias.
+	 */
+	public $alias;
 
 	/**
 	 * @var string Gallery image.
@@ -60,7 +66,7 @@ class GalleryForm extends Model
 		$this->active = true;
 
 		if (($object = $this->object) !== null) {
-			$this->setAttributes($object->getAttributes(['active', 'image', 'thumb', 'title', 'description', 'images']), false);
+			$this->setAttributes($object->getAttributes(['active', 'image', 'thumb', 'title', 'alias', 'description', 'images']), false);
 
 			Yii::$app->storage->cacheObject($object);
 			foreach ($this->images as $image) {
@@ -76,6 +82,7 @@ class GalleryForm extends Model
 	{
 		return [
 			'active' => Yii::t('gallery', 'Active'),
+			'alias' => Yii::t('gallery', 'Alias'),
 			'image' => Yii::t('gallery', 'Image'),
 			'title' => Yii::t('gallery', 'Title'),
 			'description' => Yii::t('gallery', 'Description'),
@@ -91,8 +98,9 @@ class GalleryForm extends Model
 		return [
 			['active', 'boolean'],
 			[['image', 'thumb', 'description'], 'string', 'max' => 200],
-			['title', 'string', 'max' => 100],
+			[['title', 'alias'], 'string', 'max' => 100],
 			['images', 'safe'],
+			['title', 'required'],
 		];
 	}
 
@@ -111,22 +119,31 @@ class GalleryForm extends Model
 	 * Creates new gallery using model attributes.
 	 * @return boolean
 	 */
-	public function create()
+	public function create($parent_id)
 	{
 		if (!$this->validate())
 			return false;
 
-		$this->object = $object = new Gallery([
+		$parent = Gallery::findOne($parent_id);
+		if ($parent === null)
+			$parent = Gallery::find()->roots()->one();
+
+		if ($parent === null)
+			return false;
+
+		$this->object = $object = new GalleryCollection([
 			'active' => (boolean) $this->active,
 			'image' => empty($this->image) ? null : $this->image,
 			'thumb' => empty($this->thumb) ? null : $this->thumb,
 			'title' => $this->title,
+			'alias' => $this->alias,
 			'description' => $this->description,
+			'imageCount' => sizeof($this->images),
 		]);
 
 		Yii::$app->storage->storeObject($object);
 
-		if (!$object->save(false))
+		if (!$object->appendTo($parent, false))
 			return false;
 
 		$object->makeAlias();
@@ -145,6 +162,9 @@ class GalleryForm extends Model
 		if ($this->object === null)
 			return false;
 
+		if (!$this->validate())
+			return false;
+
 		$object = $this->object;
 
 		$object->setAttributes([
@@ -152,7 +172,9 @@ class GalleryForm extends Model
 			'image' => empty($this->image) ? null : $this->image,
 			'thumb' => empty($this->thumb) ? null : $this->thumb,
 			'title' => $this->title,
+			'alias' => $this->alias,
 			'description' => $this->description,
+			'imageCount' => sizeof($this->images),
 		], false);
 
 		Yii::$app->storage->storeObject($object);

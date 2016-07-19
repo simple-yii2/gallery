@@ -3,16 +3,40 @@
 namespace gallery\common\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 use helpers\Translit;
-use storage\components\StoredInterface;
+use creocoder\nestedsets\NestedSetsBehavior;
+use creocoder\nestedsets\NestedSetsQueryBehavior;
 
 /**
- * Gallery section active record
+ * Base gallery active record
  */
-class Gallery extends ActiveRecord implements StoredInterface
+class Gallery extends ActiveRecord
 {
+
+	/**
+	 * Type constants
+	 */
+	const TYPE_SECTION = 0;
+	const TYPE_COLLECTION = 1;
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function instantiate($row)
+	{
+		if (isset($row['type'])) {
+			if ($row['type'] == static::TYPE_SECTION)
+				return new GallerySection;
+
+			if ($row['type'] == static::TYPE_COLLECTION)
+				return new GalleryCollection;
+		}
+
+		return new static;
+	}
 
 	/**
 	 * @inheritdoc
@@ -33,15 +57,6 @@ class Gallery extends ActiveRecord implements StoredInterface
 	}
 
 	/**
-	 * Images relation
-	 * @return ActiveQuery
-	 */
-	public function getImages()
-	{
-		return $this->hasMany(GalleryImage::className(), ['gallery_id' => 'id']);
-	}
-
-	/**
 	 * Making gallery alias from title and id
 	 * @return void
 	 */
@@ -51,49 +66,59 @@ class Gallery extends ActiveRecord implements StoredInterface
 	}
 
 	/**
-	 * Return files from attributes
-	 * @param array $attributes 
-	 * @return array
+	 * @inheritdoc
 	 */
-	private function getFilesFromAttributes($attributes)
+	public function behaviors()
 	{
-		$files = [];
-
-		if (!empty($attributes['image']))
-			$files[] = $attributes['image'];
-
-		if (!empty($attributes['thumb']))
-			$files[] = $attributes['thumb'];
-
-		return $files;
+		return [
+			'tree' => [
+				'class' => NestedSetsBehavior::className(),
+			],
+		];
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function getOldFiles()
+	public static function find()
 	{
-		return $this->getFilesFromAttributes($this->getOldAttributes());
+		return new GalleryQuery(get_called_class());
 	}
+
+}
+
+/**
+ * Base gallery active query
+ */
+class GalleryQuery extends ActiveQuery
+{
 
 	/**
 	 * @inheritdoc
 	 */
-	public function getFiles()
+	public function behaviors()
 	{
-		return $this->getFilesFromAttributes($this->getAttributes());
+		return [
+			NestedSetsQueryBehavior::className(),
+		];
 	}
 
 	/**
-	 * @inheritdoc
+	 * Add only section condition.
+	 * @return ActiveQuery
 	 */
-	public function setFiles($files)
+	public function section()
 	{
-		if (array_key_exists($this->image, $files))
-			$this->image = $files[$this->image];
+		return $this->andWhere(['type' => Gallery::TYPE_SECTION]);
+	}
 
-		if (array_key_exists($this->thumb, $files))
-			$this->thumb = $files[$this->thumb];
+	/**
+	 * Add only collection condition.
+	 * @return ActiveQuery
+	 */
+	public function collection()
+	{
+		return $this->andWhere(['type' => Gallery::TYPE_COLLECTION]);
 	}
 
 }

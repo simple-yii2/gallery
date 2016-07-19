@@ -4,6 +4,8 @@ namespace gallery\backend;
 
 use Yii;
 
+use gallery\common\models\Gallery;
+
 /**
  * Gallry backend module
  */
@@ -42,6 +44,13 @@ class Module extends \yii\base\Module {
 			$gallery = $auth->createRole('Gallery');
 			$auth->add($gallery);
 		}
+
+		//data
+		$root = Gallery::find()->roots()->one();
+		if ($root === null) {
+			$root = new Gallery(['title' => 'Root']);
+			$root->makeRoot();
+		}
 	}
 
 	/**
@@ -70,7 +79,7 @@ class Module extends \yii\base\Module {
 
 		if (Yii::$app->user->can('Gallery')) {
 			return [
-				['label' => Yii::t('gallery', 'Galleries'), 'url' => ["$base/gallery/gallery/index"]],
+				['label' => Yii::t('gallery', 'Galleries'), 'url' => ["$base/gallery/section/index"]],
 			];
 		}
 		

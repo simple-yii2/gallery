@@ -1,12 +1,15 @@
 <?php
 
 return [
-	'Galleries' => 'Фотогалерея',
+	'Galleries' => 'Фотогалереи',
 	
 	'Changes saved successfully.' => 'Изменения успешно сохранены.',
+	'Section not found.' => 'Раздел не найден.',
 	'Gallery not found.' => 'Фотогалерея не найдена.',
-	'Gallery deleted successfully.' => 'Фотогалерея успешно удалена.',
+	'Item not found.' => 'Объект не найден.',
+	'Item deleted successfully.' => 'Объект успешно удален.',
 
+	'Alias' => 'ЧПУ',
 	'Active' => 'Активный',
 	'Image' => 'Изображение',
 	'Title' => 'Заголовок',
@@ -16,8 +19,9 @@ return [
 	'Settings' => 'Настройки',
 	'Image settings' => 'Настройки изображения',
 	'Create gallery' => 'Добавить фотогалерею',
+	'Create section' => 'Добавить раздел',
 
 	'Cancel' => 'Отмена',
 	'Save' => 'Сохранить',
-	'Create' => 'Добавить',
+	'Create section' => 'Добавить раздел',
 ];

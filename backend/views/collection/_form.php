@@ -33,6 +33,8 @@ GalleryFormAsset::register($this);
 		'id' => 'gallery-images',
 		'fileKey' => 'file',
 		'thumbKey' => 'thumb',
+		'thumbWidth' => 360,
+		'thumbHeight' => 270,
 		'data' => function($item) {
 			return [
 				'id' => $item['id'],

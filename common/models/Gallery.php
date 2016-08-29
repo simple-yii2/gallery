@@ -57,6 +57,19 @@ class Gallery extends ActiveRecord
 	}
 
 	/**
+	 * Find page by alias
+	 * @param sring $alias Page alias or id.
+	 * @return Page
+	 */
+	public static function findByAlias($alias) {
+		$model = static::findOne(['alias' => $alias]);
+		if ($model === null)
+			$model = static::findOne(['id' => $alias]);
+
+		return $model;
+	}
+
+	/**
 	 * Making gallery alias from title and id
 	 * @return void
 	 */

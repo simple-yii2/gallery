@@ -1,0 +1,10 @@
+.gallery > div {
+	margin-bottom: 15px;
+}
+.gallery > div > a {
+	display: block;
+}
+.gallery > div > a > img {
+	display: block;
+	width: 100%;
+}

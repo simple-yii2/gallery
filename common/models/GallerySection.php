@@ -22,14 +22,4 @@ class GallerySection extends Gallery
 		$this->type = self::TYPE_SECTION;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'title' => Yii::t('gallery', 'Title'),
-		];
-	}
-
 }

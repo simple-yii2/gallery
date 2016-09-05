@@ -24,16 +24,6 @@ class GalleryCollection extends Gallery implements StoredInterface
 	}
 
 	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'title' => Yii::t('gallery', 'Title'),
-		];
-	}
-
-	/**
 	 * Images relation
 	 * @return ActiveQuery
 	 */

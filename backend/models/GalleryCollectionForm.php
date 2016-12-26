@@ -1,13 +1,13 @@
 <?php
 
-namespace gallery\backend\models;
+namespace cms\gallery\backend\models;
 
 use Yii;
 use yii\base\Model;
 
-use gallery\common\models\Gallery;
-use gallery\common\models\GalleryCollection;
-use gallery\common\models\GalleryImage;
+use cms\gallery\common\models\Gallery;
+use cms\gallery\common\models\GalleryCollection;
+use cms\gallery\common\models\GalleryImage;
 
 /**
  * Gallery collection editting form.
@@ -51,28 +51,33 @@ class GalleryCollectionForm extends Model
 	public $images = [];
 
 	/**
-	 * @var ActiveRecord Assigned object.
+	 * @var cms\gallery\common\models\GalleryCollection
 	 */
-	public $object;
+	private $_object;
 
 	/**
 	 * @inheritdoc
+	 * @param cms\gallery\common\models\GalleryCollection $object 
 	 */
-	public function init()
+	public function __construct(\cms\gallery\common\models\GalleryCollection $object, $config = [])
 	{
-		parent::init();
+		$this->_object = $object;
 
-		//default
-		$this->active = true;
+		//attributes
+		$this->active = $object->active == 0 ? '0' : '1';
+		$this->image = $object->image;
+		$this->thumb = $object->thumb;
+		$this->title = $object->title;
+		$this->alias = $object->alias;
+		$this->description = $object->description;
+		$this->images = $object->images;
 
-		if (($object = $this->object) !== null) {
-			$this->setAttributes($object->getAttributes(['active', 'image', 'thumb', 'title', 'alias', 'description', 'images']), false);
+		//file caching
+		Yii::$app->storage->cacheObject($object);
+		foreach ($object->images as $image)
+			Yii::$app->storage->cacheObject($image);
 
-			Yii::$app->storage->cacheObject($object);
-			foreach ($this->images as $image) {
-				Yii::$app->storage->cacheObject($image);
-			}
-		}
+		parent::__construct($config);
 	}
 
 	/**
@@ -116,71 +121,46 @@ class GalleryCollectionForm extends Model
 	}
 
 	/**
-	 * Creates new gallery using model attributes.
+	 * Object getter
+	 * @return cms\gallery\common\models\GalleryCollection
+	 */
+	public function getObject()
+	{
+		return $this->_object;
+	}
+
+	/**
+	 * Save object using model attributes
+	 * @param cms\gallery\common\models\GallerySection|null $object 
 	 * @return boolean
 	 */
-	public function create($parent_id)
+	public function save(\cms\gallery\common\models\GallerySection $parent = null)
 	{
 		if (!$this->validate())
 			return false;
 
-		$parent = Gallery::findOne($parent_id);
-		if ($parent === null)
-			$parent = Gallery::find()->roots()->one();
+		$object = $this->_object;
 
-		if ($parent === null)
-			return false;
-
-		$this->object = $object = new GalleryCollection([
-			'active' => (boolean) $this->active,
-			'image' => empty($this->image) ? null : $this->image,
-			'thumb' => empty($this->thumb) ? null : $this->thumb,
-			'title' => $this->title,
-			'alias' => $this->alias,
-			'description' => $this->description,
-			'imageCount' => sizeof($this->images),
-		]);
+		$object->active = $this->active == 1;
+		$object->image = empty($this->image) ? null : $this->image;
+		$object->thumb = empty($this->thumb) ? null : $this->thumb;
+		$object->title = $this->title;
+		$object->alias = $this->alias;
+		$object->description = $this->description;
+		$object->imageCount = sizeof($this->images);
 
 		Yii::$app->storage->storeObject($object);
 
-		if (!$object->appendTo($parent, false))
-			return false;
+		if ($object->getIsNewRecord()) {
+			if (!$object->appendTo($parent, false))
+				return false;
 
-		$object->makeAlias();
-		$object->update(false, ['alias']);
-
-		$this->updateImages();
-
-		return true;
-	}
-
-	/**
-	 * Gallery updating.
-	 * @return boolean
-	 */
-	public function update() {
-		if ($this->object === null)
-			return false;
-
-		if (!$this->validate())
-			return false;
-
-		$object = $this->object;
-
-		$object->setAttributes([
-			'active' => (boolean) $this->active,
-			'image' => empty($this->image) ? null : $this->image,
-			'thumb' => empty($this->thumb) ? null : $this->thumb,
-			'title' => $this->title,
-			'alias' => $this->alias,
-			'description' => $this->description,
-			'imageCount' => sizeof($this->images),
-		], false);
-
-		Yii::$app->storage->storeObject($object);
-
-		if (!$object->save(false))
-			return false;
+			$object->makeAlias();
+			$object->update(false, ['alias']);
+		} else {
+			if (!$object->save(false))
+				return false;
+		}
 
 		$this->updateImages();
 
@@ -193,8 +173,10 @@ class GalleryCollectionForm extends Model
 	 */
 	private function updateImages()
 	{
+		$object = $this->_object;
+
 		$old = [];
-		foreach ($this->object->images as $image) {
+		foreach ($object->images as $image) {
 			$old[$image->id] = $image;
 		}
 
@@ -209,7 +191,7 @@ class GalleryCollectionForm extends Model
 				unset($old[$id]);
 			} else {
 				$image = new GalleryImage();
-				$image->gallery_id = $this->object->id;
+				$image->gallery_id = $object->id;
 			}
 			$image->setAttributes($data);
 

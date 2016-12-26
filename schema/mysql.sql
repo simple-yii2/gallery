@@ -1,6 +1,7 @@
 create table if not exists `Gallery`
 (
 	`id` int(10) not null auto_increment,
+	`tree` int(10),
 	`lft` int(10) not null,
 	`rgt` int(10) not null,
 	`depth` int(10) not null,

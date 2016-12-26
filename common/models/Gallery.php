@@ -1,6 +1,6 @@
 <?php
 
-namespace gallery\common\models;
+namespace cms\gallery\common\models;
 
 use Yii;
 use yii\db\ActiveQuery;
@@ -86,6 +86,7 @@ class Gallery extends ActiveRecord
 		return [
 			'tree' => [
 				'class' => NestedSetsBehavior::className(),
+				'treeAttribute' => 'tree',
 			],
 		];
 	}

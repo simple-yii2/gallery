@@ -11,12 +11,9 @@ if ($model->object !== null)
 <?php $form = ActiveForm::begin([
 	'layout' => 'horizontal',
 	'enableClientValidation' => false,
-	'options' => ['class' => 'gallery-form'],
 ]); ?>
 
 	<?= $form->field($model, 'title') ?>
-
-	<?php if ($model->object !== null) echo $form->field($model, 'alias'); ?>
 
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">

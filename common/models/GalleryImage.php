@@ -1,6 +1,6 @@
 <?php
 
-namespace gallery\common\models;
+namespace cms\gallery\common\models;
 
 use yii\db\ActiveRecord;
 

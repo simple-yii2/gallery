@@ -1,6 +1,6 @@
 <?php
 
-namespace gallery\common\models;
+namespace cms\gallery\common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -20,6 +20,7 @@ class GalleryCollection extends Gallery implements StoredInterface
 	{
 		parent::init();
 
+		$this->active = true;
 		$this->type = self::TYPE_COLLECTION;
 	}
 
@@ -30,6 +31,14 @@ class GalleryCollection extends Gallery implements StoredInterface
 	public function getImages()
 	{
 		return $this->hasMany(GalleryImage::className(), ['gallery_id' => 'id']);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function find()
+	{
+		return parent::find()->andWhere(['type' => self::TYPE_COLLECTION]);
 	}
 
 	/**

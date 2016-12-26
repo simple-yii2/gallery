@@ -1,6 +1,6 @@
 <?php
 
-namespace gallery\backend\assets;
+namespace cms\gallery\backend\assets;
 
 use yii\web\AssetBundle;
 

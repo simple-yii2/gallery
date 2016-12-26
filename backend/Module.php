@@ -1,10 +1,10 @@
 <?php
 
-namespace gallery\backend;
+namespace cms\gallery\backend;
 
 use Yii;
 
-use gallery\common\models\Gallery;
+use cms\gallery\common\models\Gallery;
 
 /**
  * Gallry backend module
@@ -40,16 +40,9 @@ class Module extends \yii\base\Module {
 		//rbac
 		$auth = Yii::$app->getAuthManager();
 		if ($auth->getRole('Gallery') === null) {
-			//gallery role
-			$gallery = $auth->createRole('Gallery');
-			$auth->add($gallery);
-		}
-
-		//data
-		$root = Gallery::find()->roots()->one();
-		if ($root === null) {
-			$root = new Gallery(['title' => 'Root']);
-			$root->makeRoot();
+			//role
+			$role = $auth->createRole('Gallery');
+			$auth->add($role);
 		}
 	}
 

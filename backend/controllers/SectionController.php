@@ -1,6 +1,6 @@
 <?php
 
-namespace gallery\backend\controllers;
+namespace cms\gallery\backend\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -8,19 +8,15 @@ use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use gallery\common\models\Gallery;
-use gallery\common\models\GallerySection;
-use gallery\backend\models\GallerySectionForm;
+use cms\gallery\common\models\Gallery;
+use cms\gallery\common\models\GallerySection;
+use cms\gallery\backend\models\GallerySectionForm;
 
-/**
- * Gallery section controller.
- */
 class SectionController extends Controller
 {
 
 	/**
-	 * Access control.
-	 * @return array
+	 * @inheritdoc
 	 */
 	public function behaviors()
 	{
@@ -35,9 +31,9 @@ class SectionController extends Controller
 	}
 
 	/**
-	 * Gallery tree.
+	 * Tree
 	 * @param integer|null $id Initial item id
-	 * @return void
+	 * @return string
 	 */
 	public function actionIndex($id = null)
 	{
@@ -54,17 +50,17 @@ class SectionController extends Controller
 	}
 
 	/**
-	 * Create gallery section.
-	 * @param integer|null $id Parent item id.
-	 * @return void
+	 * Create
+	 * @return string
 	 */
-	public function actionCreate($id = null)
+	public function actionCreate()
 	{
-		$model = new GallerySectionForm;
+		$model = new GallerySectionForm(new GallerySection);
 
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->create($id)) {
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('gallery', 'Changes saved successfully.'));
-			return $this->redirect(['index', 'id' => $model->object->id]);
+			
+			return $this->redirect(['index', 'id' => $model->getObject()->id]);
 		}
 
 		return $this->render('create', [
@@ -73,21 +69,21 @@ class SectionController extends Controller
 	}
 
 	/**
-	 * Gallery section updating.
-	 * @param integer $id Gallery section id.
-	 * @return void
+	 * Update
+	 * @param integer $id
+	 * @return string
 	 */
 	public function actionUpdate($id)
 	{
 		$object = GallerySection::findOne($id);
 		if ($object === null)
-			throw new BadRequestHttpException(Yii::t('gallery', 'Section not found.'));
+			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
-		$model = new GallerySectionForm(['object' => $object]);
+		$model = new GallerySectionForm($object);
 
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->update()) {
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('gallery', 'Changes saved successfully.'));
-			return $this->redirect(['index', 'id' => $model->object->id]);
+			return $this->redirect(['index', 'id' => $model->getObject()->id]);
 		}
 
 		return $this->render('update', [
@@ -96,22 +92,19 @@ class SectionController extends Controller
 	}
 
 	/**
-	 * Gallery deleting.
-	 * @param integer $id Gallery id.
-	 * @return void
+	 * Delete
+	 * @param integer $id
+	 * @return string
 	 */
 	public function actionDelete($id)
 	{
-		$model = Gallery::findOne($id);
-		if ($model === null)
+		$object = GallerySection::findOne($id);
+		if ($object === null)
 			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
-		$parent = $model->parents(1)->one();
+		$collections = $object->children()->collection()->all();
 
-		$collections = [];
-		if ($model instanceof GalleryCollection)
-			$collections[] = $model;
-		$collections = array_merge($collections, $model->children()->collection()->all());
+		//remove images and files
 		foreach ($collections as $collection) {
 			foreach ($collection->images as $image) {
 				$image->delete();
@@ -120,14 +113,11 @@ class SectionController extends Controller
 			Yii::$app->storage->removeObject($collection);
 		}
 
-		if ($model->deleteWithChildren())
+		//remove section with collections
+		if ($object->deleteWithChildren())
 			Yii::$app->session->setFlash('success', Yii::t('gallery', 'Item deleted successfully.'));
 
-		$url = ['index'];
-		if ($parent !== null && !$parent->isRoot())
-			$url['id'] = $parent->id;
-
-		return $this->redirect($url);
+		return $this->redirect(['index']);
 	}
 
 }

@@ -9,7 +9,6 @@ return [
 	'Item not found.' => 'Объект не найден.',
 	'Item deleted successfully.' => 'Объект успешно удален.',
 
-	'Alias' => 'ЧПУ',
 	'Active' => 'Активный',
 	'Image' => 'Изображение',
 	'Title' => 'Заголовок',

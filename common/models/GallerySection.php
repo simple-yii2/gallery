@@ -1,6 +1,6 @@
 <?php
 
-namespace gallery\common\models;
+namespace cms\gallery\common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -20,6 +20,14 @@ class GallerySection extends Gallery
 
 		$this->active = true;
 		$this->type = self::TYPE_SECTION;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function find()
+	{
+		return parent::find()->andWhere(['type' => self::TYPE_SECTION]);
 	}
 
 }

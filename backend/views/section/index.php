@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 
 use dkhlystov\widgets\NestedTreeGrid;
-use gallery\common\models\GalleryCollection;
-use gallery\common\models\GallerySection;
+use cms\gallery\common\models\GalleryCollection;
+use cms\gallery\common\models\GallerySection;
 
 $title = Yii::t('gallery', 'Galleries');
 
@@ -25,6 +25,7 @@ $this->params['breadcrumbs'] = [
 	'dataProvider' => $dataProvider,
 	'initialNode' => $initial,
 	// 'moveAction' => ['move'],
+	'showRoots' => true,
 	'tableOptions' => ['class' => 'table table-condensed'],
 	'rowOptions' => function ($model, $key, $index, $grid) {
 		return !$model->active ? ['class' => 'warning'] : [];
@@ -63,9 +64,6 @@ $this->params['breadcrumbs'] = [
 			'urlCreator' => function($action, $model, $key, $index) {
 				if ($action == 'create')
 					return ['collection/create', 'id' => $model->id];
-
-				if ($action == 'delete')
-					return ['delete', 'id' => $model->id];
 
 				$route = $action;
 

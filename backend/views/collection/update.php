@@ -7,11 +7,11 @@ $title = $model->title;
 $this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
-	['label' => Yii::t('gallery', 'Galleries'), 'url' => ['index']],
+	['label' => Yii::t('gallery', 'Galleries'), 'url' => ['section/index']],
 	$title,
 ];
 
 ?>
 <h1><?= Html::encode($title) ?></h1>
 
-<?= $this->render('_form', ['model'=>$model]) ?>
+<?= $this->render('form', ['model'=>$model]) ?>

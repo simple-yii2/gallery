@@ -3,7 +3,7 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
-use gallery\backend\assets\GalleryFormAsset;
+use cms\gallery\backend\assets\GalleryFormAsset;
 use uploadimage\widgets\UploadImage;
 use uploadimage\widgets\UploadImages;
 
@@ -24,8 +24,6 @@ GalleryFormAsset::register($this);
 	]) ?>
 
 	<?= $form->field($model, 'title') ?>
-
-	<?php if ($model->object !== null) echo $form->field($model, 'alias'); ?>
 
 	<?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace gallery\backend\models;
+namespace cms\gallery\backend\models;
 
 use Yii;
 use yii\base\Model;
 
-use gallery\common\models\Gallery;
-use gallery\common\models\GallerySection;
+use cms\gallery\common\models\Gallery;
+use cms\gallery\common\models\GallerySection;
 
 /**
  * Gallery section editting form.
@@ -25,20 +25,23 @@ class GallerySectionForm extends Model
 	public $alias;
 
 	/**
-	 * @var ActiveRecord Assigned object.
+	 * @var cms\gallery\common\models\GallerySection
 	 */
-	public $object;
+	private $_object;
 
 	/**
 	 * @inheritdoc
+	 * @param cms\gallery\common\models\GallerySection $object 
 	 */
-	public function init()
+	public function __construct(\cms\gallery\common\models\GallerySection $object, $config = [])
 	{
-		parent::init();
+		$this->_object = $object;
 
-		if (($object = $this->object) !== null) {
-			$this->setAttributes($object->getAttributes(['title', 'alias']), false);
-		}
+		//attributes
+		$this->title = $object->title;
+		$this->alias = $object->alias;
+
+		parent::__construct($config);
 	}
 
 	/**
@@ -64,54 +67,38 @@ class GallerySectionForm extends Model
 	}
 
 	/**
-	 * Creates new gallery section using model attributes.
+	 * Object getter
+	 * @return cms\gallery\common\models\GallerySection
+	 */
+	public function getObject()
+	{
+		return $this->_object;
+	}
+
+	/**
+	 * Save object using model attributes
 	 * @return boolean
 	 */
-	public function create($parent_id)
+	public function save()
 	{
 		if (!$this->validate())
 			return false;
 
-		$parent = Gallery::findOne($parent_id);
-		if ($parent === null)
-			$parent = Gallery::find()->roots()->one();
+		$object = $this->_object;
 
-		if ($parent === null)
-			return false;
+		$object->title = $this->title;
+		$object->alias = $this->alias;
 
-		$this->object = $object = new GallerySection([
-			'title' => $this->title,
-		]);
+		if ($object->getIsNewRecord()) {
+			if (!$object->makeRoot(false))
+				return false;
 
-		if (!$object->appendTo($parent, false))
-			return false;
-
-		$object->makeAlias();
-		$object->update(false, ['alias']);
-
-		return true;
-	}
-
-	/**
-	 * Gallery section updating.
-	 * @return boolean
-	 */
-	public function update() {
-		if ($this->object === null)
-			return false;
-
-		if (!$this->validate())
-			return false;
-
-		$object = $this->object;
-
-		$object->setAttributes([
-			'title' => $this->title,
-			'alias' => $this->alias,
-		], false);
-
-		if (!$object->save(false))
-			return false;
+			$object->makeAlias();
+			$object->update(false, ['alias']);
+		} else {
+			if (!$object->save(false))
+				return false;
+		}
 
 		return true;
 	}

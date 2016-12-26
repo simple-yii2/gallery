@@ -1,6 +1,6 @@
 {
     "name": "simple-yii2/gallery",
-    "description": "Images gallery module for Yii PHP Framework Version 2",
+    "description": "Images gallery module for Yii 2 framework",
     "type": "yii2-module",
     "keywords": ["yii2","module","gallery"],
     "license": "BSD-3-Clause",
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "gallery\\": ""
+            "cms\\gallery\\": ""
         }
     }
 }

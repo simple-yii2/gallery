@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\ListView;
 
 use dkhlystov\widgets\Lightbox;
-use gallery\frontend\assets\CollectionAsset;
+use cms\gallery\frontend\assets\CollectionAsset;
 
 CollectionAsset::register($this);
 

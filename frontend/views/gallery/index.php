@@ -6,12 +6,9 @@ $title = $model->title;
 
 $this->title = $title . ' | ' . Yii::$app->name;
 
-$this->params['breadcrumbs'] = [
-	$title,
-];
+?>
+<h1><?= Html::encode($title) ?></h1>
 
-echo Html::tag('h1', Html::encode($title));
-
-echo $this->render($model->type == $model::TYPE_SECTION ? 'index/section' : 'index/collection', [
+<?= $this->render($model->type == $model::TYPE_SECTION ? 'index/section' : 'index/collection', [
 	'model' => $model,
-]);
+]) ?>

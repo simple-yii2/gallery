@@ -1,6 +1,6 @@
 <?php
 
-namespace gallery\frontend;
+namespace cms\gallery\frontend;
 
 /**
  * Gallery frontend module

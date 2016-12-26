@@ -1,11 +1,11 @@
 <?php
 
-namespace gallery\frontend\controllers;
+namespace cms\gallery\frontend\controllers;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-use gallery\common\models\Gallery;
+use cms\gallery\common\models\Gallery;
 
 /**
  * Gallery frontend controller

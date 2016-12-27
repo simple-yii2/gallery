@@ -20,8 +20,10 @@ class GalleryCollection extends Gallery implements StoredInterface
 	{
 		parent::init();
 
-		$this->active = true;
 		$this->type = self::TYPE_COLLECTION;
+		$this->active = true;
+		$this->thumbWidth = 360;
+		$this->thumbHeight = 270;
 	}
 
 	/**

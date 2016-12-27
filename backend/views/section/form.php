@@ -15,6 +15,18 @@ if ($model->object !== null)
 
 	<?= $form->field($model, 'title') ?>
 
+	<?php if (!$model->isEmpty()) {
+		echo $form->field($model, 'thumbWidth')->staticControl();
+	} else {
+		echo $form->field($model, 'thumbWidth');
+	} ?>
+
+	<?php if (!$model->isEmpty()) {
+		echo $form->field($model, 'thumbHeight')->staticControl();
+	} else {
+		echo $form->field($model, 'thumbHeight');
+	} ?>
+
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
 			<?= Html::submitButton(Yii::t('gallery', 'Save'), ['class' => 'btn btn-primary']) ?>

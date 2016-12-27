@@ -18,8 +18,10 @@ class GallerySection extends Gallery
 	{
 		parent::init();
 
-		$this->active = true;
 		$this->type = self::TYPE_SECTION;
+		$this->active = true;
+		$this->thumbWidth = 360;
+		$this->thumbHeight = 270;
 	}
 
 	/**

@@ -16,4 +16,5 @@ $this->params['breadcrumbs'] = [
 
 <?= $this->render('form', [
 	'model' => $model,
+	'section' => $section,
 ]) ?>

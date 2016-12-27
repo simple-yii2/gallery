@@ -49,6 +49,7 @@ class CollectionController extends Controller
 
 		return $this->render('create', [
 			'model' => $model,
+			'section' => $parent,
 		]);
 	}
 

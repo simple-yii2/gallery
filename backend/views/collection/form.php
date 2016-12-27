@@ -4,8 +4,8 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 use cms\gallery\backend\assets\GalleryFormAsset;
-use uploadimage\widgets\UploadImage;
-use uploadimage\widgets\UploadImages;
+use dkhlystov\uploadimage\widgets\UploadImage;
+use dkhlystov\uploadimage\widgets\UploadImages;
 
 GalleryFormAsset::register($this);
 
@@ -20,7 +20,8 @@ GalleryFormAsset::register($this);
 
 	<?= $form->field($model, 'image')->widget(UploadImage::className(), [
 		'thumbAttribute' => 'thumb',
-		'maxFileSize' => 2048,
+		'thumbWidth' => $section->thumbWidth,
+		'thumbHeight' => $section->thumbHeight,
 	]) ?>
 
 	<?= $form->field($model, 'title') ?>
@@ -31,8 +32,8 @@ GalleryFormAsset::register($this);
 		'id' => 'gallery-images',
 		'fileKey' => 'file',
 		'thumbKey' => 'thumb',
-		'thumbWidth' => 360,
-		'thumbHeight' => 270,
+		'thumbWidth' => $section->thumbWidth,
+		'thumbHeight' => $section->thumbHeight,
 		'data' => function($item) {
 			return [
 				'id' => $item['id'],

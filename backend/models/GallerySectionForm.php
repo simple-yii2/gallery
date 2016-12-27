@@ -20,9 +20,14 @@ class GallerySectionForm extends Model
 	public $title;
 
 	/**
-	 * @var string Alias.
+	 * @var integer
 	 */
-	public $alias;
+	public $thumbWidth;
+
+	/**
+	 * @var integer
+	 */
+	public $thumbHeight;
 
 	/**
 	 * @var cms\gallery\common\models\GallerySection
@@ -39,7 +44,8 @@ class GallerySectionForm extends Model
 
 		//attributes
 		$this->title = $object->title;
-		$this->alias = $object->alias;
+		$this->thumbWidth = $object->thumbWidth;
+		$this->thumbHeight = $object->thumbHeight;
 
 		parent::__construct($config);
 	}
@@ -51,7 +57,8 @@ class GallerySectionForm extends Model
 	{
 		return [
 			'title' => Yii::t('gallery', 'Title'),
-			'alias' => Yii::t('gallery', 'Alias'),
+			'thumbWidth' => Yii::t('gallery', 'Thumb width'),
+			'thumbHeight' => Yii::t('gallery', 'Thumb height'),
 		];
 	}
 
@@ -61,8 +68,10 @@ class GallerySectionForm extends Model
 	public function rules()
 	{
 		return [
-			[['title', 'alias'], 'string', 'max' => 100],
+			[['title'], 'string', 'max' => 100],
 			['title', 'required'],
+			[['thumbWidth', 'thumbHeight'], 'integer', 'min' => 32, 'max' => 1000],
+			[['thumbWidth', 'thumbHeight'], 'required']
 		];
 	}
 
@@ -73,6 +82,15 @@ class GallerySectionForm extends Model
 	public function getObject()
 	{
 		return $this->_object;
+	}
+
+	/**
+	 * Determine if object is empty
+	 * @return boolean
+	 */
+	public function isEmpty()
+	{
+		return $this->_object->getIsNewRecord() || ($this->_object->rgt - $this->_object->lft == 1);
 	}
 
 	/**
@@ -87,7 +105,8 @@ class GallerySectionForm extends Model
 		$object = $this->_object;
 
 		$object->title = $this->title;
-		$object->alias = $this->alias;
+		$object->thumbWidth = (integer) $this->thumbWidth;
+		$object->thumbHeight = (integer) $this->thumbHeight;
 
 		if ($object->getIsNewRecord()) {
 			if (!$object->makeRoot(false))

@@ -8,6 +8,8 @@ create table if not exists `Gallery`
 	`type` int(10) not null default 0,
 	`active` tinyint(1) default 1,
 	`alias` varchar(100) default null,
+	`thumbWidth` int(10) default 360,
+	`thumbHeight` int(10) default 270,
 	`image` varchar(200) default null,
 	`thumb` varchar(200) default null,
 	`title` varchar(100) default null,

@@ -14,6 +14,8 @@ return [
 	'Title' => 'Заголовок',
 	'Description' => 'Описание',
 	'Gallery' => 'Фотогалерея',
+	'Thumb width' => 'Ширина миниатюры',
+	'Thumb height' => 'Высота миниатюры ',
 
 	'Settings' => 'Настройки',
 	'Image settings' => 'Настройки изображения',

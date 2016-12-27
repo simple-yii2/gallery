@@ -12,6 +12,8 @@ GalleryFormAsset::register($this);
 $width = $section->thumbWidth;
 $height = $section->thumbHeight;
 
+$imageSize = '<br><span class="label label-default">' . $width . '&times' . $height . '</span>';
+
 ?>
 <?php $form = ActiveForm::begin([
 	'layout' => 'horizontal',
@@ -21,7 +23,7 @@ $height = $section->thumbHeight;
 
 	<?= $form->field($model, 'active')->checkbox() ?>
 
-	<?= $form->field($model, 'image')->widget(UploadImage::className(), [
+	<?= $form->field($model, 'image')->label($model->getAttributeLabel('image') . $imageSize)->widget(UploadImage::className(), [
 		'thumbAttribute' => 'thumb',
 		'thumbWidth' => $width,
 		'thumbHeight' => $height,
@@ -31,7 +33,7 @@ $height = $section->thumbHeight;
 
 	<?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
 
-	<?= $form->field($model, 'images')->widget(UploadImages::className(), [
+	<?= $form->field($model, 'images')->label($model->getAttributeLabel('images') . $imageSize)->widget(UploadImages::className(), [
 		'id' => 'gallery-images',
 		'fileKey' => 'file',
 		'thumbKey' => 'thumb',

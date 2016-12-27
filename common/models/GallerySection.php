@@ -24,12 +24,4 @@ class GallerySection extends Gallery
 		$this->thumbHeight = 270;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public static function find()
-	{
-		return parent::find()->andWhere(['type' => self::TYPE_SECTION]);
-	}
-
 }

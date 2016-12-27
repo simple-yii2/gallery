@@ -37,7 +37,7 @@ class CollectionController extends Controller
 	public function actionCreate($id)
 	{
 		$parent = GallerySection::findOne($id);
-		if ($parent === null)
+		if ($parent === null && ($perent instanceof GallerySection))
 			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
 		$model = new GalleryCollectionForm(new GalleryCollection);
@@ -61,7 +61,7 @@ class CollectionController extends Controller
 	public function actionUpdate($id)
 	{
 		$object = GalleryCollection::findOne($id);
-		if ($object === null)
+		if ($object === null && ($perent instanceof GalleryCollection))
 			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
 		$model = new GalleryCollectionForm($object);
@@ -73,6 +73,7 @@ class CollectionController extends Controller
 
 		return $this->render('update', [
 			'model' => $model,
+			'section' => $object->parents(1)->one(),
 		]);
 	}
 
@@ -84,7 +85,7 @@ class CollectionController extends Controller
 	public function actionDelete($id)
 	{
 		$object = GalleryCollection::findOne($id);
-		if ($object === null)
+		if ($object === null && ($perent instanceof GalleryCollection))
 			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
 		$sibling = $object->prev()->one();

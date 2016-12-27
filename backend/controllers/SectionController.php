@@ -76,7 +76,7 @@ class SectionController extends Controller
 	public function actionUpdate($id)
 	{
 		$object = GallerySection::findOne($id);
-		if ($object === null)
+		if ($object === null && ($perent instanceof GallerySection))
 			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
 		$model = new GallerySectionForm($object);
@@ -99,7 +99,7 @@ class SectionController extends Controller
 	public function actionDelete($id)
 	{
 		$object = GallerySection::findOne($id);
-		if ($object === null)
+		if ($object === null && ($perent instanceof GallerySection))
 			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
 		$collections = $object->children()->collection()->all();

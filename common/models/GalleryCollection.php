@@ -36,14 +36,6 @@ class GalleryCollection extends Gallery implements StoredInterface
 	}
 
 	/**
-	 * @inheritdoc
-	 */
-	public static function find()
-	{
-		return parent::find()->andWhere(['type' => self::TYPE_COLLECTION]);
-	}
-
-	/**
 	 * Return files from attributes
 	 * @param array $attributes 
 	 * @return array

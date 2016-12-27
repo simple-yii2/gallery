@@ -25,8 +25,6 @@ $height = $section->thumbHeight;
 		'thumbAttribute' => 'thumb',
 		'thumbWidth' => $width,
 		'thumbHeight' => $height,
-		'width' => $width,
-		'height' => $height,
 	]) ?>
 
 	<?= $form->field($model, 'title') ?>
@@ -39,8 +37,6 @@ $height = $section->thumbHeight;
 		'thumbKey' => 'thumb',
 		'thumbWidth' => $width,
 		'thumbHeight' => $height,
-		'width' => $width,
-		'height' => $height,
 		'data' => function($item) {
 			return [
 				'id' => $item['id'],

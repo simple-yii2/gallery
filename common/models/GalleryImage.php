@@ -4,7 +4,7 @@ namespace cms\gallery\common\models;
 
 use yii\db\ActiveRecord;
 
-use storage\components\StoredInterface;
+use dkhlystov\storage\components\StoredInterface;
 
 /**
  * Gallery image active record

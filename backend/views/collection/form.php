@@ -9,6 +9,9 @@ use dkhlystov\uploadimage\widgets\UploadImages;
 
 GalleryFormAsset::register($this);
 
+$width = $section->thumbWidth;
+$height = $section->thumbHeight;
+
 ?>
 <?php $form = ActiveForm::begin([
 	'layout' => 'horizontal',
@@ -20,8 +23,10 @@ GalleryFormAsset::register($this);
 
 	<?= $form->field($model, 'image')->widget(UploadImage::className(), [
 		'thumbAttribute' => 'thumb',
-		'thumbWidth' => $section->thumbWidth,
-		'thumbHeight' => $section->thumbHeight,
+		'thumbWidth' => $width,
+		'thumbHeight' => $height,
+		'width' => $width,
+		'height' => $height,
 	]) ?>
 
 	<?= $form->field($model, 'title') ?>
@@ -32,8 +37,10 @@ GalleryFormAsset::register($this);
 		'id' => 'gallery-images',
 		'fileKey' => 'file',
 		'thumbKey' => 'thumb',
-		'thumbWidth' => $section->thumbWidth,
-		'thumbHeight' => $section->thumbHeight,
+		'thumbWidth' => $width,
+		'thumbHeight' => $height,
+		'width' => $width,
+		'height' => $height,
 		'data' => function($item) {
 			return [
 				'id' => $item['id'],

@@ -35,7 +35,12 @@ $this->params['breadcrumbs'] = [
 			'attribute' => 'title',
 			'format' => 'html',
 			'value' => function($model, $key, $index, $column) {
-				$result = Html::encode($model->title);
+				$result = '';
+
+				if (($model instanceof GalleryCollection) && !empty($model->thumb))
+					$result .= Html::img($model->thumb, ['height' => 20]) . '&nbsp;';
+
+				$result .= Html::encode($model->title);
 
 				if ($model instanceof GalleryCollection)
 					$result .= '&nbsp;' . Html::tag('span', $model->imageCount, ['class' => 'badge']);

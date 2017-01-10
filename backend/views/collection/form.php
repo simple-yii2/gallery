@@ -64,7 +64,7 @@ $imageSize = '<br><span class="label label-default">' . $width . '&times' . $hei
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
 			<?= Html::submitButton(Yii::t('gallery', 'Save'), ['class' => 'btn btn-primary']) ?>
-			<?= Html::a(Yii::t('gallery', 'Cancel'), ['section/index'], ['class' => 'btn btn-default']) ?>
+			<?= Html::a(Yii::t('gallery', 'Cancel'), ['section/index', 'id' => $model->getObject()->id], ['class' => 'btn btn-default']) ?>
 		</div>
 	</div>
 

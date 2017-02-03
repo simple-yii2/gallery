@@ -13,6 +13,8 @@ if ($model->object !== null)
 	'enableClientValidation' => false,
 ]); ?>
 
+	<?= $form->field($model, 'active')->checkbox() ?>
+
 	<?= $form->field($model, 'title') ?>
 
 	<?php if (!$model->isEmpty()) {

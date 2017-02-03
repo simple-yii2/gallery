@@ -15,6 +15,11 @@ class GalleryCollectionForm extends Model
 {
 
 	/**
+	 * @var boolean Active.
+	 */
+	public $active;
+
+	/**
 	 * @var string Title.
 	 */
 	public $title;
@@ -46,6 +51,7 @@ class GalleryCollectionForm extends Model
 		$this->_object = $object;
 
 		//attributes
+		$this->active = $object->active == 0 ? '0' : '1';
 		$this->title = $object->title;
 		$this->thumbWidth = $object->thumbWidth;
 		$this->thumbHeight = $object->thumbHeight;
@@ -59,6 +65,7 @@ class GalleryCollectionForm extends Model
 	public function attributeLabels()
 	{
 		return [
+			'active' => Yii::t('gallery', 'Active'),
 			'title' => Yii::t('gallery', 'Title'),
 			'thumbWidth' => Yii::t('gallery', 'Thumb width'),
 			'thumbHeight' => Yii::t('gallery', 'Thumb height'),
@@ -71,6 +78,7 @@ class GalleryCollectionForm extends Model
 	public function rules()
 	{
 		return [
+			['active', 'boolean'],
 			[['title'], 'string', 'max' => 100],
 			['title', 'required'],
 			[['thumbWidth', 'thumbHeight'], 'integer', 'min' => 32, 'max' => 1000],
@@ -107,6 +115,7 @@ class GalleryCollectionForm extends Model
 
 		$object = $this->_object;
 
+		$object->active = $this->active == 1;
 		$object->title = $this->title;
 		$object->thumbWidth = (integer) $this->thumbWidth;
 		$object->thumbHeight = (integer) $this->thumbHeight;

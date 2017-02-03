@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\web\JsExpression;
 
 use dkhlystov\widgets\NestedTreeGrid;
 use cms\gallery\common\models\GalleryItem;
@@ -27,8 +28,27 @@ $this->params['breadcrumbs'] = [
 	'moveAction' => ['move'],
 	'showRoots' => true,
 	'tableOptions' => ['class' => 'table table-condensed'],
+	'pluginOptions' => [
+		'onMoveOver' => new JsExpression('function (item, helper, target, position) {
+			if (item.data("depth") == 0 || target.data("depth") == 0)
+				return false;
+
+			if (item.data("tree") != target.data("tree"))
+				return false;
+
+			return position != 1;
+		}'),
+	],
 	'rowOptions' => function ($model, $key, $index, $grid) {
-		return !$model->active ? ['class' => 'warning'] : [];
+		$options = ['data' => [
+			'depth' => $model->depth,
+			'tree' => $model->tree,
+		]];
+
+		if (!$model->active)
+			Html::addCssClass($options, 'warning');
+
+		return $options;
 	},
 	'columns' => [
 		[
@@ -43,7 +63,7 @@ $this->params['breadcrumbs'] = [
 
 				$result .= Html::encode($model->title);
 
-				if ($model instanceof GalleryItem)
+				if (($model instanceof GalleryItem) && $model->imageCount > 1)
 					$result .= '&nbsp;' . Html::tag('span', $model->imageCount, ['class' => 'badge']);
 
 				return $result;

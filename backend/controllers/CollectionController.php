@@ -120,4 +120,39 @@ class CollectionController extends Controller
 		return $this->redirect(['index']);
 	}
 
+	/**
+	 * Move
+	 * @param integer $id 
+	 * @param integer $target 
+	 * @param integer $position 
+	 * @return string
+	 */
+	public function actionMove($id, $target, $position)
+	{
+		$object = Gallery::findOne($id);
+		if ($object === null)
+			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
+		if ($object->isRoot())
+			return;
+
+		$t = Gallery::findOne($target);
+		if ($t === null)
+			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
+		if ($t->isRoot())
+			return;
+
+		if ($object->tree != $t->tree)
+			return;
+
+		switch ($position) {
+			case 0:
+				$object->insertBefore($t);
+				break;
+			
+			case 2:
+				$object->insertAfter($t);
+				break;
+		}
+	}
+
 }

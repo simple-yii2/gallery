@@ -32,7 +32,7 @@ class GalleryCollection extends Gallery
 	 */
 	public function behaviors()
 	{
-		return [
+		return array_merge(parent::behaviors(), [
 			'sitemap' => [
 				'class' => 'cms\sitemap\common\behaviors\SitemapBehavior',
 				'loc' => function($model) {
@@ -40,7 +40,7 @@ class GalleryCollection extends Gallery
 				},
 				'active' => 'active',
 			],
-		];
+		]);
 	}
 
 	/**

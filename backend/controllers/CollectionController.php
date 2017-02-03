@@ -3,13 +3,14 @@
 namespace cms\gallery\backend\controllers;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
-use cms\gallery\backend\models\GalleryCollectionForm;
+use cms\gallery\common\models\Gallery;
 use cms\gallery\common\models\GalleryCollection;
-use cms\gallery\common\models\GallerySection;
+use cms\gallery\backend\models\GalleryCollectionForm;
 
 class CollectionController extends Controller
 {
@@ -30,26 +31,40 @@ class CollectionController extends Controller
 	}
 
 	/**
-	 * Create
-	 * @param integer $id section id
+	 * Tree
+	 * @param integer|null $id Initial item id
 	 * @return string
 	 */
-	public function actionCreate($id)
+	public function actionIndex($id = null)
 	{
-		$parent = GallerySection::findOne($id);
-		if ($parent === null && ($perent instanceof GallerySection))
-			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
+		$initial = Gallery::findOne($id);
 
-		$model = new GalleryCollectionForm(new GalleryCollection);
+		$dataProvider = new ActiveDataProvider([
+			'query' => Gallery::find(),
+		]);
 
-		if ($model->load(Yii::$app->getRequest()->post()) && $model->save($parent)) {
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+			'initial' => $initial,
+		]);
+	}
+
+	/**
+	 * Create
+	 * @return string
+	 */
+	public function actionCreate()
+	{
+		$model = new GalleryCollectionForm;
+
+		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('gallery', 'Changes saved successfully.'));
-			return $this->redirect(['section/index', 'id' => $model->getObject()->id]);
+			
+			return $this->redirect(['index', 'id' => $model->getObject()->id]);
 		}
 
 		return $this->render('create', [
 			'model' => $model,
-			'section' => $parent,
 		]);
 	}
 
@@ -68,12 +83,11 @@ class CollectionController extends Controller
 
 		if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 			Yii::$app->session->setFlash('success', Yii::t('gallery', 'Changes saved successfully.'));
-			return $this->redirect(['section/index', 'id' => $model->getObject()->id]);
+			return $this->redirect(['index', 'id' => $model->getObject()->id]);
 		}
 
 		return $this->render('update', [
 			'model' => $model,
-			'section' => $object->parents(1)->one(),
 		]);
 	}
 
@@ -88,22 +102,22 @@ class CollectionController extends Controller
 		if ($object === null && ($perent instanceof GalleryCollection))
 			throw new BadRequestHttpException(Yii::t('gallery', 'Item not found.'));
 
-		$sibling = $object->prev()->one();
-		if ($sibling === null)
-			$sibling = $object->next()->one();
+		$collections = $object->children()->collection()->all();
 
 		//remove images and files
-		foreach ($object->images as $image) {
-			$image->delete();
-			Yii::$app->storage->removeObject($image);
+		foreach ($collections as $collection) {
+			foreach ($collection->images as $image) {
+				$image->delete();
+				Yii::$app->storage->removeObject($image);
+			}
+			Yii::$app->storage->removeObject($collection);
 		}
-		Yii::$app->storage->removeObject($object);
 
-		//collection
+		//remove section with collections
 		if ($object->deleteWithChildren())
 			Yii::$app->session->setFlash('success', Yii::t('gallery', 'Item deleted successfully.'));
 
-		return $this->redirect(['section/index', 'id' => $sibling ? $sibling->id : null]);
+		return $this->redirect(['index']);
 	}
 
 }

@@ -5,12 +5,12 @@ namespace cms\gallery\common\models;
 use Yii;
 use yii\db\ActiveRecord;
 
-use dkhlystov\storage\components\StoredInterface;
+use helpers\Translit;
 
 /**
  * Gallery collection active record
  */
-class GalleryCollection extends Gallery implements StoredInterface
+class GalleryCollection extends Gallery
 {
 
 	/**
@@ -27,58 +27,12 @@ class GalleryCollection extends Gallery implements StoredInterface
 	}
 
 	/**
-	 * Images relation
-	 * @return ActiveQuery
+	 * Making gallery alias from title and id
+	 * @return void
 	 */
-	public function getImages()
+	public function makeAlias()
 	{
-		return $this->hasMany(GalleryImage::className(), ['gallery_id' => 'id']);
-	}
-
-	/**
-	 * Return files from attributes
-	 * @param array $attributes 
-	 * @return array
-	 */
-	private function getFilesFromAttributes($attributes)
-	{
-		$files = [];
-
-		if (!empty($attributes['image']))
-			$files[] = $attributes['image'];
-
-		if (!empty($attributes['thumb']))
-			$files[] = $attributes['thumb'];
-
-		return $files;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getOldFiles()
-	{
-		return $this->getFilesFromAttributes($this->getOldAttributes());
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getFiles()
-	{
-		return $this->getFilesFromAttributes($this->getAttributes());
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function setFiles($files)
-	{
-		if (array_key_exists($this->image, $files))
-			$this->image = $files[$this->image];
-
-		if (array_key_exists($this->thumb, $files))
-			$this->thumb = $files[$this->thumb];
+		$this->alias = Translit::t($this->title . '-' . $this->id);
 	}
 
 }

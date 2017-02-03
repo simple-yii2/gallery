@@ -7,7 +7,7 @@ $title = Yii::t('gallery', 'Create gallery');
 $this->title = $title . ' | ' . Yii::$app->name;
 
 $this->params['breadcrumbs'] = [
-	['label' => Yii::t('gallery', 'Galleries'), 'url' => ['section/index']],
+	['label' => Yii::t('gallery', 'Galleries'), 'url' => ['index']],
 	$title,
 ];
 
@@ -16,5 +16,4 @@ $this->params['breadcrumbs'] = [
 
 <?= $this->render('form', [
 	'model' => $model,
-	'section' => $section,
 ]) ?>

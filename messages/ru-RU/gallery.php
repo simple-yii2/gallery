@@ -10,7 +10,7 @@ return [
 	'Item deleted successfully.' => 'Объект успешно удален.',
 
 	'Active' => 'Активный',
-	'Image' => 'Изображение',
+	'Images' => 'Изображения',
 	'Title' => 'Заголовок',
 	'Description' => 'Описание',
 	'Gallery' => 'Фотогалерея',
@@ -19,10 +19,9 @@ return [
 
 	'Settings' => 'Настройки',
 	'Image settings' => 'Настройки изображения',
-	'Create gallery' => 'Добавить фотогалерею',
-	'Create section' => 'Добавить раздел',
 
-	'Cancel' => 'Отмена',
+	'Create gallery' => 'Добавить фотогалерею',
+	'Create image' => 'Добавить изображение',
 	'Save' => 'Сохранить',
-	'Create section' => 'Добавить раздел',
+	'Cancel' => 'Отмена',
 ];

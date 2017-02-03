@@ -44,8 +44,6 @@ Yii::$app->params['breadcrumbs'] = [
 			$result .= Html::a(Html::img($image->thumb) . $count, $image->file);
 		}
 
-		// $result = Html::a(Html::img($model->thumb) . $count, $model->image);
-
 		if (!empty($model->title))
 			$result .= Html::tag('h4', Html::encode($model->title));
 

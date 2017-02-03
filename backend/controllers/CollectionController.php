@@ -107,10 +107,9 @@ class CollectionController extends Controller
 		//remove images and files
 		foreach ($collections as $collection) {
 			foreach ($collection->images as $image) {
-				$image->delete();
 				Yii::$app->storage->removeObject($image);
+				$image->delete();
 			}
-			Yii::$app->storage->removeObject($collection);
 		}
 
 		//remove section with collections

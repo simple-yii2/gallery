@@ -4,6 +4,7 @@ namespace cms\gallery\common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 use helpers\Translit;
 
@@ -24,6 +25,22 @@ class GalleryCollection extends Gallery
 		$this->active = true;
 		$this->thumbWidth = 360;
 		$this->thumbHeight = 270;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			'sitemap' => [
+				'class' => 'cms\sitemap\common\behaviors\SitemapBehavior',
+				'loc' => function($model) {
+					return Url::toRoute(['/gallery/collection/index', 'alias' => $model->alias]);
+				},
+				'active' => 'active',
+			],
+		];
 	}
 
 	/**

@@ -36,7 +36,7 @@ class GalleryCollection extends Gallery
 			'sitemap' => [
 				'class' => 'cms\sitemap\common\behaviors\SitemapBehavior',
 				'loc' => function($model) {
-					return Url::toRoute(['/gallery/collection/index', 'alias' => $model->alias]);
+					return Url::toRoute(['/gallery/gallery/index', 'alias' => $model->alias]);
 				},
 				'active' => 'active',
 			],

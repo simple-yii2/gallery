@@ -27,15 +27,19 @@ class GalleryItem extends Gallery implements StoredInterface
 	 */
 	public function behaviors()
 	{
-		return array_merge(parent::behaviors(), [
-			'sitemap' => [
+		$behaviors = parent::behaviors();
+
+		if (class_exists('cms\sitemap\common\behaviors\SitemapBehavior')) {
+			$behaviors['sitemap'] = [
 				'class' => 'cms\sitemap\common\behaviors\SitemapBehavior',
 				'loc' => function($model) {
 					return Url::toRoute(['/gallery/gallery/index', 'alias' => $model->alias]);
 				},
 				'active' => 'active',
-			],
-		]);
+			];
+		}
+
+		return $behaviors;
 	}
 
 	/**

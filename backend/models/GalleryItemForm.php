@@ -5,7 +5,7 @@ namespace cms\gallery\backend\models;
 use Yii;
 use yii\base\Model;
 
-use cms\gallery\common\models\Gallery;
+use cms\gallery\common\models\GallerySection;
 use cms\gallery\common\models\GalleryCollection;
 use cms\gallery\common\models\GalleryItem;
 use cms\gallery\common\models\GalleryImage;
@@ -32,6 +32,16 @@ class GalleryItemForm extends Model
 	public $description;
 
 	/**
+	 * @var string
+	 */
+	public $image;
+
+	/**
+	 * @var string
+	 */
+	public $thumb;
+
+	/**
 	 * @var array Gallery images.
 	 */
 	public $images = [];
@@ -56,9 +66,12 @@ class GalleryItemForm extends Model
 		$this->active = $object->active == 0 ? '0' : '1';
 		$this->title = $object->title;
 		$this->description = $object->description;
+		$this->image = $object->image;
+		$this->thumb = $object->thumb;
 		$this->images = $object->images;
 
 		//file caching
+		Yii::$app->storage->cacheObject($object);
 		foreach ($object->images as $image)
 			Yii::$app->storage->cacheObject($image);
 
@@ -74,6 +87,7 @@ class GalleryItemForm extends Model
 			'active' => Yii::t('gallery', 'Active'),
 			'title' => Yii::t('gallery', 'Title'),
 			'description' => Yii::t('gallery', 'Description'),
+			'image' => Yii::t('gallery', 'Thumb'),
 			'images' => Yii::t('gallery', 'Images'),
 		];
 	}
@@ -87,8 +101,9 @@ class GalleryItemForm extends Model
 			['active', 'boolean'],
 			['title', 'string', 'max' => 100],
 			['description', 'string', 'max' => 200],
+			[['image', 'thumb'], 'string'],
 			['images', 'safe'],
-			['images', 'required'],
+			[['title', 'images'], 'required'],
 		];
 	}
 
@@ -114,10 +129,10 @@ class GalleryItemForm extends Model
 
 	/**
 	 * Save object using model attributes
-	 * @param GalleryCollection|null $object 
+	 * @param GallerySection|GalleryCollection|null $parent 
 	 * @return boolean
 	 */
-	public function save(GalleryCollection $parent = null)
+	public function save($parent = null)
 	{
 		if (!$this->validate())
 			return false;
@@ -127,7 +142,11 @@ class GalleryItemForm extends Model
 		$object->active = $this->active == 1;
 		$object->title = $this->title;
 		$object->description = $this->description;
+		$object->image = $this->image;
+		$object->thumb = $this->thumb;
 		$object->imageCount = sizeof($this->images);
+
+		Yii::$app->storage->storeObject($object);
 
 		if ($object->getIsNewRecord()) {
 			if (!$object->appendTo($parent, false))
@@ -137,11 +156,12 @@ class GalleryItemForm extends Model
 				return false;
 		}
 
-		$this->updateImages();
+		if (empty($this->alias)) {
+			$object->makeAlias();
+			$object->update(false, ['alias']);
+		}
 
-		$object->image = $this->images[0]['file'];
-		$object->thumb = $this->images[0]['thumb'];
-		$object->update(false, ['image', 'thumb']);
+		$this->updateImages();
 
 		return true;
 	}

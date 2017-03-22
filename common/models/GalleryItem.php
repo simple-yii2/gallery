@@ -2,8 +2,7 @@
 
 namespace cms\gallery\common\models;
 
-use Yii;
-use yii\db\ActiveRecord;
+use yii\helpers\Url;
 
 use dkhlystov\storage\components\StoredInterface;
 
@@ -21,6 +20,22 @@ class GalleryItem extends Gallery implements StoredInterface
 		$this->active = true;
 		$this->thumbWidth = 360;
 		$this->thumbHeight = 270;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return array_merge(parent::behaviors(), [
+			'sitemap' => [
+				'class' => 'cms\sitemap\common\behaviors\SitemapBehavior',
+				'loc' => function($model) {
+					return Url::toRoute(['/gallery/gallery/index', 'alias' => $model->alias]);
+				},
+				'active' => 'active',
+			],
+		]);
 	}
 
 	/**

@@ -2,17 +2,26 @@
 
 namespace cms\gallery\common\models;
 
-use Yii;
-use yii\db\ActiveRecord;
-use yii\helpers\Url;
-
-use helpers\Translit;
+use dkhlystov\storage\components\StoredInterface;
 
 /**
  * Gallery collection active record
+ * 
+ * Thumb size is specify only in section (root collection).
+ * In other collections you can set any image for preview.
  */
-class GalleryCollection extends Gallery
+class GalleryCollection extends Gallery implements StoredInterface
 {
+
+	/**
+	 * @inheritdoc
+	 */
+	public function __construct($config = [])
+	{
+		parent::__construct($config);
+
+		$this->type = self::TYPE_COLLECTION;
+	}	
 
 	/**
 	 * @inheritdoc
@@ -21,35 +30,54 @@ class GalleryCollection extends Gallery
 	{
 		parent::init();
 
-		$this->type = self::TYPE_COLLECTION;
-		$this->active = true;
-		$this->thumbWidth = 360;
-		$this->thumbHeight = 270;
+		if ($this->active === null)
+			$this->active = true;
+	}
+
+	/**
+	 * Return files from attributes
+	 * @param array $attributes 
+	 * @return array
+	 */
+	private function getFilesFromAttributes($attributes)
+	{
+		$files = [];
+
+		if (!empty($attributes['image']))
+			$files[] = $attributes['image'];
+
+		if (!empty($attributes['thumb']))
+			$files[] = $attributes['thumb'];
+
+		return $files;
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function behaviors()
+	public function getOldFiles()
 	{
-		return array_merge(parent::behaviors(), [
-			'sitemap' => [
-				'class' => 'cms\sitemap\common\behaviors\SitemapBehavior',
-				'loc' => function($model) {
-					return Url::toRoute(['/gallery/gallery/index', 'alias' => $model->alias]);
-				},
-				'active' => 'active',
-			],
-		]);
+		return $this->getFilesFromAttributes($this->getOldAttributes());
 	}
 
 	/**
-	 * Making gallery alias from title and id
-	 * @return void
+	 * @inheritdoc
 	 */
-	public function makeAlias()
+	public function getFiles()
 	{
-		$this->alias = Translit::t($this->title . '-' . $this->id);
+		return $this->getFilesFromAttributes($this->getAttributes());
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function setFiles($files)
+	{
+		if (array_key_exists($this->image, $files))
+			$this->image = $files[$this->image];
+
+		if (array_key_exists($this->thumb, $files))
+			$this->thumb = $files[$this->thumb];
 	}
 
 }

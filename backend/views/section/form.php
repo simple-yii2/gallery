@@ -3,15 +3,8 @@
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
-use dkhlystov\uploadimage\widgets\UploadImage;
-
-$width = $parent->thumbWidth;
-$height = $parent->thumbHeight;
-
-$imageSize = '<br><span class="label label-default">' . $width . '&times;' . $height . '</span>';
-
 $cancelUrl = ['gallery/index'];
-if ($model->object !== null)
+if ($model->getObject() !== null)
 	$cancelUrl['id'] = $model->getObject()->id;
 
 ?>
@@ -22,15 +15,19 @@ if ($model->object !== null)
 
 	<?= $form->field($model, 'active')->checkbox() ?>
 
-	<?= $form->field($model, 'image')->label($model->getAttributeLabel('image') . $imageSize)->widget(UploadImage::className(), [
-		'thumbAttribute' => 'thumb',
-		'thumbWidth' => $width,
-		'thumbHeight' => $height,
-	]) ?>
-
 	<?= $form->field($model, 'title') ?>
 
-	<?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
+	<?php if (!$model->isEmpty()) {
+		echo $form->field($model, 'thumbWidth')->staticControl();
+	} else {
+		echo $form->field($model, 'thumbWidth');
+	} ?>
+
+	<?php if (!$model->isEmpty()) {
+		echo $form->field($model, 'thumbHeight')->staticControl();
+	} else {
+		echo $form->field($model, 'thumbHeight');
+	} ?>
 
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">

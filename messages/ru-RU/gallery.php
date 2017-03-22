@@ -14,14 +14,16 @@ return [
 	'Title' => 'Заголовок',
 	'Description' => 'Описание',
 	'Gallery' => 'Фотогалерея',
+	'Thumb' => 'Миниатюра',
 	'Thumb width' => 'Ширина миниатюры',
 	'Thumb height' => 'Высота миниатюры ',
 
 	'Settings' => 'Настройки',
 	'Image settings' => 'Настройки изображения',
 
+	'Create' => 'Добавить',
+	'Create section' => 'Добавить раздел',
 	'Create gallery' => 'Добавить фотогалерею',
-	'Create image' => 'Добавить изображение',
 	'Save' => 'Сохранить',
 	'Cancel' => 'Отмена',
 ];

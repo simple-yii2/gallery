@@ -42,7 +42,7 @@ class Module extends BackendModule {
 			return [];
 
 		return [
-			['label' => Yii::t('gallery', 'Galleries'), 'url' => ["$base/gallery/collection/index"]],
+			['label' => Yii::t('gallery', 'Galleries'), 'url' => ["$base/gallery/gallery/index"]],
 		];
 	}
 

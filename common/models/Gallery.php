@@ -9,6 +9,8 @@ use yii\db\ActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
 use creocoder\nestedsets\NestedSetsQueryBehavior;
 
+use helpers\Translit;
+
 /**
  * Base gallery active record
  */
@@ -18,8 +20,9 @@ class Gallery extends ActiveRecord
 	/**
 	 * Type constants
 	 */
-	const TYPE_COLLECTION = 0;
-	const TYPE_ITEM = 1;
+	const TYPE_SECTION = 0;
+	const TYPE_COLLECTION = 1;
+	const TYPE_ITEM = 2;
 
 	/**
 	 * @inheritdoc
@@ -27,6 +30,9 @@ class Gallery extends ActiveRecord
 	public static function instantiate($row)
 	{
 		if (isset($row['type'])) {
+			if ($row['type'] == static::TYPE_SECTION)
+				return new GallerySection;
+
 			if ($row['type'] == static::TYPE_COLLECTION)
 				return new GalleryCollection;
 
@@ -77,6 +83,15 @@ class Gallery extends ActiveRecord
 	public static function find()
 	{
 		return new GalleryQuery(get_called_class());
+	}
+
+	/**
+	 * Making gallery alias from title and id
+	 * @return void
+	 */
+	public function makeAlias()
+	{
+		$this->alias = Translit::t($this->title . '-' . $this->id);
 	}
 
 }

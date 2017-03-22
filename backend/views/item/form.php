@@ -9,8 +9,8 @@ use dkhlystov\uploadimage\widgets\UploadImages;
 
 GalleryFormAsset::register($this);
 
-$width = $collection->thumbWidth;
-$height = $collection->thumbHeight;
+$width = $parent->thumbWidth;
+$height = $parent->thumbHeight;
 
 $imageSize = '<br><span class="label label-default">' . $width . '&times' . $height . '</span>';
 
@@ -22,6 +22,12 @@ $imageSize = '<br><span class="label label-default">' . $width . '&times' . $hei
 ]); ?>
 
 	<?= $form->field($model, 'active')->checkbox() ?>
+
+	<?= $form->field($model, 'image')->label($model->getAttributeLabel('image') . $imageSize)->widget(UploadImage::className(), [
+		'thumbAttribute' => 'thumb',
+		'thumbWidth' => $width,
+		'thumbHeight' => $height,
+	]) ?>
 
 	<?= $form->field($model, 'title') ?>
 
@@ -58,7 +64,7 @@ $imageSize = '<br><span class="label label-default">' . $width . '&times' . $hei
 	<div class="form-group">
 		<div class="col-sm-offset-3 col-sm-6">
 			<?= Html::submitButton(Yii::t('gallery', 'Save'), ['class' => 'btn btn-primary']) ?>
-			<?= Html::a(Yii::t('gallery', 'Cancel'), ['collection/index', 'id' => $model->getObject()->id], ['class' => 'btn btn-default']) ?>
+			<?= Html::a(Yii::t('gallery', 'Cancel'), ['gallery/index', 'id' => $model->getObject()->id], ['class' => 'btn btn-default']) ?>
 		</div>
 	</div>
 

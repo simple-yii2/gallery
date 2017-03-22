@@ -2,20 +2,28 @@
 
 use yii\helpers\Html;
 
-$title = Yii::t('gallery', 'Create image');
+use cms\gallery\common\models\GallerySection;
+
+$title = Yii::t('gallery', 'Create gallery');
 
 $this->title = $title . ' | ' . Yii::$app->name;
 
-$this->params['breadcrumbs'] = [
-	['label' => Yii::t('gallery', 'Galleries'), 'url' => ['collection/index']],
-	['label' => $collection->title, 'url' => ['collection/update', 'id' => $collection->id]],
-	$title,
-];
+$breadcrumbs = [['label' => Yii::t('gallery', 'Galleries'), 'url' => ['gallery/index']]];
+foreach (array_merge($parent->parents()->all(), [$parent]) as $object) {
+	if ($object instanceof GallerySection) {
+		$url = ['section/update', 'id' => $object->id];
+	} else {
+		$url = ['collection/update', 'id' => $object->id];
+	}
+	$breadcrumbs[] = ['label' => $object->title, 'url' => $url];
+}
+$breadcrumbs[] = $title;
+$this->params['breadcrumbs'] = $breadcrumbs;
 
 ?>
 <h1><?= Html::encode($title) ?></h1>
 
 <?= $this->render('form', [
 	'model' => $model,
-	'collection' => $collection,
+	'parent' => $parent,
 ]) ?>

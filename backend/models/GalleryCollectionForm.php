@@ -5,7 +5,7 @@ namespace cms\gallery\backend\models;
 use Yii;
 use yii\base\Model;
 
-use cms\gallery\common\models\Gallery;
+use cms\gallery\common\models\GallerySection;
 use cms\gallery\common\models\GalleryCollection;
 
 /**
@@ -25,14 +25,19 @@ class GalleryCollectionForm extends Model
 	public $title;
 
 	/**
-	 * @var integer
+	 * @var string Description.
 	 */
-	public $thumbWidth;
+	public $description;
 
 	/**
-	 * @var integer
+	 * @var string
 	 */
-	public $thumbHeight;
+	public $image;
+
+	/**
+	 * @var string
+	 */
+	public $thumb;
 
 	/**
 	 * @var GalleryCollection
@@ -53,8 +58,12 @@ class GalleryCollectionForm extends Model
 		//attributes
 		$this->active = $object->active == 0 ? '0' : '1';
 		$this->title = $object->title;
-		$this->thumbWidth = $object->thumbWidth;
-		$this->thumbHeight = $object->thumbHeight;
+		$this->description = $object->description;
+		$this->image = $object->image;
+		$this->thumb = $object->thumb;
+
+		//file caching
+		Yii::$app->storage->cacheObject($object);
 
 		parent::__construct($config);
 	}
@@ -67,8 +76,8 @@ class GalleryCollectionForm extends Model
 		return [
 			'active' => Yii::t('gallery', 'Active'),
 			'title' => Yii::t('gallery', 'Title'),
-			'thumbWidth' => Yii::t('gallery', 'Thumb width'),
-			'thumbHeight' => Yii::t('gallery', 'Thumb height'),
+			'description' => Yii::t('gallery', 'Description'),
+			'image' => Yii::t('gallery', 'Thumb'),
 		];
 	}
 
@@ -79,10 +88,10 @@ class GalleryCollectionForm extends Model
 	{
 		return [
 			['active', 'boolean'],
-			[['title'], 'string', 'max' => 100],
+			['title', 'string', 'max' => 100],
+			['description', 'string', 'max' => 200],
+			[['image', 'thumb'], 'string'],
 			['title', 'required'],
-			[['thumbWidth', 'thumbHeight'], 'integer', 'min' => 32, 'max' => 1000],
-			[['thumbWidth', 'thumbHeight'], 'required']
 		];
 	}
 
@@ -96,39 +105,42 @@ class GalleryCollectionForm extends Model
 	}
 
 	/**
-	 * Determine if object is empty
-	 * @return boolean
-	 */
-	public function isEmpty()
-	{
-		return $this->_object->getIsNewRecord() || ($this->_object->rgt - $this->_object->lft == 1);
-	}
-
-	/**
 	 * Save object using model attributes
+	 * @param GallerySection|GalleryCollection|null $parent 
 	 * @return boolean
 	 */
-	public function save()
+	public function save($parent = null)
 	{
 		if (!$this->validate())
 			return false;
 
 		$object = $this->_object;
 
+		if ($object->getIsNewRecord() && !($parent instanceof GallerySection || $parent instanceof GalleryCollection))
+			throw new \Exception('$parent must be set to create new object');
+
 		$object->active = $this->active == 1;
 		$object->title = $this->title;
-		$object->thumbWidth = (integer) $this->thumbWidth;
-		$object->thumbHeight = (integer) $this->thumbHeight;
+		$object->description = $this->description;
+		$object->image = $this->image;
+		$object->thumb = $this->thumb;
+
+		Yii::$app->storage->storeObject($object);
 
 		if ($object->getIsNewRecord()) {
-			if (!$object->makeRoot(false))
-				return false;
+			$object->thumbWidth = $parent->thumbWidth;
+			$object->thumbHeight = $parent->thumbHeight;
 
-			$object->makeAlias();
-			$object->update(false, ['alias']);
+			if (!$object->appendTo($parent, false))
+				return false;
 		} else {
 			if (!$object->save(false))
 				return false;
+		}
+
+		if (empty($this->alias)) {
+			$object->makeAlias();
+			$object->update(false, ['alias']);
 		}
 
 		return true;

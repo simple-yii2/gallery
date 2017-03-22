@@ -1,0 +1,85 @@
+.gallery > div > a {
+	display: block;
+	margin-bottom: 20px;
+	position: relative;
+}
+.gallery > div > a > img {
+	display: block;
+	width: 100%;
+}
+
+
+
+.gallery-caption {
+	bottom: 0;
+	color: #fff;
+	display: block;
+	left: 0;
+	padding: 0 45px 15px 15px;
+	position: absolute;
+	text-decoration: none;
+	width: 100%;
+
+	background: -webkit-linear-gradient(rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.8) 100%);
+    background: -moz-linear-gradient(rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.8) 100%);
+    background: -o-linear-gradient(rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.8) 100%);
+    background: -ms-linear-gradient(rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.8) 100%);
+    background: linear-gradient(rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.8) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4d000000',endColorstr='#cc000000',GradientType=0);
+}
+.gallery-caption:before {
+	content: '';
+	height: 15px;
+	left: 0;
+	position: absolute;
+	top: -15px;
+	width: 100%;
+
+	background: -webkit-linear-gradient(rgba(0,0,0,0) 0%,rgba(0,0,0,0.3) 100%);
+    background: -moz-linear-gradient(rgba(0,0,0,0) 0%,rgba(0,0,0,0.3) 100%);
+    background: -o-linear-gradient(rgba(0,0,0,0) 0%,rgba(0,0,0,0.3) 100%);
+    background: -ms-linear-gradient(rgba(0,0,0,0) 0%,rgba(0,0,0,0.3) 100%);
+    background: linear-gradient(rgba(0,0,0,0) 0%,rgba(0,0,0,0.3) 100%);
+}
+
+
+
+.gallery-count {
+	background: rgba(0,0,0,0.5);
+	bottom: 15px;
+	border: 1px solid #fff;
+	font-size: 12px;
+	line-height: 18px;
+	min-width: 20px;
+	padding: 0 1px;
+	position: absolute;
+	right: 15px;
+	text-align: center;
+}
+.gallery-count:before {
+	bottom: -3px;
+	border-bottom: 1px solid #fff;
+	border-left: 1px solid #fff;
+	box-sizing: content-box;
+	content: '';
+	height: 1px;
+	left: 2px;
+	position: absolute;
+	width: 100%;
+}
+.gallery-count:after {
+	border-top: 1px solid #fff;
+	border-right: 1px solid #fff;
+	box-sizing: content-box;
+	content: '';
+	height: 100%;
+	right: -3px;
+	top: 2px;
+	position: absolute;
+	width: 1px;
+}
+
+
+
+.gallery-title {
+}

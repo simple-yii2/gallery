@@ -36,13 +36,13 @@ class Module extends BackendModule {
 	/**
 	 * @inheritdoc
 	 */
-	public function cmsMenu($base)
+	public function cmsMenu()
 	{
 		if (!Yii::$app->user->can('Gallery'))
 			return [];
 
 		return [
-			['label' => Yii::t('gallery', 'Galleries'), 'url' => ["$base/gallery/gallery/index"]],
+			['label' => Yii::t('gallery', 'Galleries'), 'url' => ['/gallery/gallery/index']],
 		];
 	}
 

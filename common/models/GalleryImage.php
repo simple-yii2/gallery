@@ -17,7 +17,7 @@ class GalleryImage extends ActiveRecord implements StoredInterface
 	 */
 	public static function tableName()
 	{
-		return 'GalleryImage';
+		return 'gallery_image';
 	}
 
 	/**

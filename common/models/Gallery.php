@@ -48,7 +48,7 @@ class Gallery extends ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return 'Gallery';
+		return 'gallery';
 	}
 
 	/**

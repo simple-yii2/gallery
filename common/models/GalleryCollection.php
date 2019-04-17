@@ -12,72 +12,66 @@ use dkhlystov\storage\components\StoredInterface;
  */
 class GalleryCollection extends Gallery implements StoredInterface
 {
+    /**
+     * @inheritdoc
+     */
+    public function __construct($config = [])
+    {
+        parent::__construct(array_replace([
+            'active' => true,
+        ], $config));
 
-	/**
-	 * @inheritdoc
-	 */
-	public function __construct($config = [])
-	{
-		parent::__construct($config);
+        $this->type = self::TYPE_COLLECTION;
+    }
 
-		$this->type = self::TYPE_COLLECTION;
-	}	
+    public function getItems()
+    {
+        return $this->children(1)->orderBy(['type' => SORT_ASC])->all();
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function init()
-	{
-		parent::init();
+    /**
+     * Return files from attributes
+     * @param array $attributes 
+     * @return array
+     */
+    private function getFilesFromAttributes($attributes)
+    {
+        $files = [];
 
-		if ($this->active === null)
-			$this->active = true;
-	}
+        if (!empty($attributes['image']))
+            $files[] = $attributes['image'];
 
-	/**
-	 * Return files from attributes
-	 * @param array $attributes 
-	 * @return array
-	 */
-	private function getFilesFromAttributes($attributes)
-	{
-		$files = [];
+        if (!empty($attributes['thumb']))
+            $files[] = $attributes['thumb'];
 
-		if (!empty($attributes['image']))
-			$files[] = $attributes['image'];
+        return $files;
+    }
 
-		if (!empty($attributes['thumb']))
-			$files[] = $attributes['thumb'];
+    /**
+     * @inheritdoc
+     */
+    public function getOldFiles()
+    {
+        return $this->getFilesFromAttributes($this->getOldAttributes());
+    }
 
-		return $files;
-	}
+    /**
+     * @inheritdoc
+     */
+    public function getFiles()
+    {
+        return $this->getFilesFromAttributes($this->getAttributes());
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getOldFiles()
-	{
-		return $this->getFilesFromAttributes($this->getOldAttributes());
-	}
+    /**
+     * @inheritdoc
+     */
+    public function setFiles($files)
+    {
+        if (array_key_exists($this->image, $files))
+            $this->image = $files[$this->image];
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getFiles()
-	{
-		return $this->getFilesFromAttributes($this->getAttributes());
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function setFiles($files)
-	{
-		if (array_key_exists($this->image, $files))
-			$this->image = $files[$this->image];
-
-		if (array_key_exists($this->thumb, $files))
-			$this->thumb = $files[$this->thumb];
-	}
-
+        if (array_key_exists($this->thumb, $files))
+            $this->thumb = $files[$this->thumb];
+    }
 }

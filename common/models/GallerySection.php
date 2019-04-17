@@ -11,7 +11,6 @@ namespace cms\gallery\common\models;
  */
 class GallerySection extends Gallery
 {
-
     /**
      * @inheritdoc
      */
@@ -24,4 +23,8 @@ class GallerySection extends Gallery
         $this->type = self::TYPE_SECTION;
     }   
 
+    public function getItems()
+    {
+        return $this->children(1)->orderBy(['type' => SORT_ASC])->all();
+    }
 }

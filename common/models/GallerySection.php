@@ -12,31 +12,16 @@ namespace cms\gallery\common\models;
 class GallerySection extends Gallery
 {
 
-	/**
-	 * @inheritdoc
-	 */
-	public function __construct($config = [])
-	{
-		parent::__construct($config);
+    /**
+     * @inheritdoc
+     */
+    public function __construct($config = [])
+    {
+        parent::__construct(array_replace([
+            'active' => true,
+        ], $config));
 
-		$this->type = self::TYPE_SECTION;
-	}	
-
-	/**
-	 * @inheritdoc
-	 */
-	public function init()
-	{
-		parent::init();
-
-		if ($this->active === null)
-			$this->active = true;
-
-		if ($this->thumbWidth === null)
-			$this->thumbWidth = 360;
-
-		if ($this->thumbHeight === null)
-			$this->thumbHeight = 270;
-	}
+        $this->type = self::TYPE_SECTION;
+    }   
 
 }

@@ -128,9 +128,6 @@ class GalleryCollectionForm extends Model
 		Yii::$app->storage->storeObject($object);
 
 		if ($object->getIsNewRecord()) {
-			$object->thumbWidth = $parent->thumbWidth;
-			$object->thumbHeight = $parent->thumbHeight;
-
 			if (!$object->appendTo($parent, false))
 				return false;
 		} else {

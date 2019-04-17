@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
 use creocoder\nestedsets\NestedSetsQueryBehavior;
 
-use helpers\Translit;
+use dkhlystov\helpers\Translit;
 
 /**
  * Base gallery active record

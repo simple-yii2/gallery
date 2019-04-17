@@ -15,8 +15,7 @@ return [
 	'Description' => 'Описание',
 	'Gallery' => 'Фотогалерея',
 	'Thumb' => 'Миниатюра',
-	'Thumb width' => 'Ширина миниатюры',
-	'Thumb height' => 'Высота миниатюры ',
+	'Alias' => 'ЧПУ',
 
 	'Settings' => 'Настройки',
 	'Image settings' => 'Настройки изображения',

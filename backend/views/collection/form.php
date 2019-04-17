@@ -5,38 +5,32 @@ use yii\helpers\Html;
 
 use dkhlystov\uploadimage\widgets\UploadImage;
 
-$width = $parent->thumbWidth;
-$height = $parent->thumbHeight;
-
-$imageSize = '<br><span class="label label-default">' . $width . '&times;' . $height . '</span>';
-
 $cancelUrl = ['gallery/index'];
 if ($model->object !== null)
-	$cancelUrl['id'] = $model->getObject()->id;
+    $cancelUrl['id'] = $model->getObject()->id;
 
 ?>
 <?php $form = ActiveForm::begin([
-	'layout' => 'horizontal',
-	'enableClientValidation' => false,
+    'layout' => 'horizontal',
+    'enableClientValidation' => false,
 ]); ?>
 
-	<?= $form->field($model, 'active')->checkbox() ?>
+    <?= $form->field($model, 'active')->checkbox() ?>
 
-	<?= $form->field($model, 'image')->label($model->getAttributeLabel('image') . $imageSize)->widget(UploadImage::className(), [
-		'thumbAttribute' => 'thumb',
-		'thumbWidth' => $width,
-		'thumbHeight' => $height,
-	]) ?>
+    <?= $form->field($model, 'image')->widget(UploadImage::className(), [
+        'thumbAttribute' => 'thumb',
+        'options' => ['class' => ''],
+    ]) ?>
 
-	<?= $form->field($model, 'title') ?>
+    <?= $form->field($model, 'title') ?>
 
-	<?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
+    <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
 
-	<div class="form-group">
-		<div class="col-sm-offset-3 col-sm-6">
-			<?= Html::submitButton(Yii::t('gallery', 'Save'), ['class' => 'btn btn-primary']) ?>
-			<?= Html::a(Yii::t('gallery', 'Cancel'), $cancelUrl, ['class' => 'btn btn-default']) ?>
-		</div>
-	</div>
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-6">
+            <?= Html::submitButton(Yii::t('gallery', 'Save'), ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(Yii::t('gallery', 'Cancel'), $cancelUrl, ['class' => 'btn btn-default']) ?>
+        </div>
+    </div>
 
 <?php ActiveForm::end(); ?>

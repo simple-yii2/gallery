@@ -50,6 +50,11 @@ class GalleryItem extends Gallery implements StoredInterface
         return $this->hasMany(GalleryImage::className(), ['gallery_id' => 'id']);
     }
 
+    public function getItems()
+    {
+        return $this->getImages()->all();
+    }
+
     /**
      * Return files from attributes
      * @param array $attributes 

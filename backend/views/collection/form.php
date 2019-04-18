@@ -24,6 +24,8 @@ if ($model->object !== null)
 
     <?= $form->field($model, 'title') ?>
 
+    <?= $form->field($model, 'alias') ?>
+
     <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
 
     <div class="form-group">
